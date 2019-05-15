@@ -72,7 +72,7 @@ namespace Binom
             return res;
         }
 
-        // На основе свойства вынесения, представляем C(n,k) как произведение дробей - до n= 73
+        // На основе свойства вынесения, представляем C(n,k) как произведение дробей - до n= 62
         public static ulong BinomFactorization(uint n, uint k)
         {
             if (k > n)
@@ -91,12 +91,36 @@ namespace Binom
             checked
             {
                 for (uint i = 1; i <= n - m; i++)
-                    res *= (m + i) / i;
+                    /* Надо явно указывать последовательность операций скобками, 
+                     * иначе деление может выполниться перед умножением и будет отброшен хвост */
+                    res = (res * (m + i)) / i;
             }
 
             return res;
         }
 
+        public static ulong BinomRecursiveAdd(uint n, uint k)
+        {
+            if (k > n)
+                return 0;
+
+            if (k == 1)
+                return n;
+
+            if (k == n)
+                return 1;
+
+            ulong res = 1;
+
+            uint m = Math.Max(k, n - k);
+
+            checked
+            {
+                res = BinomRecursiveAdd(n - 1, m - 1) + BinomRecursiveAdd(n - 1, m);
+            }
+
+            return res;
+        }
 
     }
 

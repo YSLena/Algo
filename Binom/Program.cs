@@ -16,11 +16,11 @@ namespace Binom
 
             string path = Path.Combine(Environment.CurrentDirectory, "Log.txt");
             StreamWriter LogFile = new StreamWriter(path, false);
-            string str;
+            string str, str1;
             List<string> LogStrings = new List<string>();
 
             LogStrings.Clear();
-            str = "BinomNaive";
+            str = "Наивыный алгоритм";
             Console.WriteLine(str);
             LogStrings.Add(str);
             try
@@ -31,8 +31,9 @@ namespace Binom
                     Console.Write("n= {0}: ", n.ToString("d3"));
                     for (m = 0; m <= n; m++)
                     {
-                        str = str + BinomCalc.BinomNaive(n, m).ToString() + " ";
-                        Console.Write(str);
+                        str1 = BinomCalc.BinomNaive(n, m).ToString() + " ";
+                        str = str + str1;
+                        Console.Write(str1);
                     }
                     Console.WriteLine();
                     LogStrings.Add(str);
@@ -40,8 +41,8 @@ namespace Binom
             }
             catch
             {
-                str = str = "Капец при n=" + n.ToString("d3");
-                Console.WriteLine("Капец при n= {0}: ", n.ToString("d3"));
+                str = str + "КАПЕЦ при n=" + n.ToString("d3");
+                Console.WriteLine("КАПЕЦ при n= {0}: ", n.ToString("d3"));
                 LogStrings.Add(str);
             }
 
@@ -57,7 +58,7 @@ namespace Binom
             /***********************************/
 
             LogStrings.Clear();
-            str = "BinomAdvanced";
+            str = "Улучшенный алгоритм";
             Console.WriteLine(str);
             LogStrings.Add(str);
             try
@@ -68,8 +69,9 @@ namespace Binom
                     Console.Write("n= {0}: ", n.ToString("d3"));
                     for (m = 0; m <= n; m++)
                     {
-                        str = str + BinomCalc.BinomAdvanced(n, m).ToString() + " ";
-                        Console.Write(str);
+                        str1 = BinomCalc.BinomAdvanced(n, m).ToString() + " ";
+                        str = str + str1;
+                        Console.Write(str1);
                     }
                     Console.WriteLine();
                     LogStrings.Add(str);
@@ -77,8 +79,8 @@ namespace Binom
             }
             catch
             {
-                str = str = "Капец при n=" + n.ToString("d3");
-                Console.WriteLine("Капец при n= {0}: ", n.ToString("d3"));
+                str = str + "КАПЕЦ при n=" + n.ToString("d3");
+                Console.WriteLine("КАПЕЦ при n= {0}: ", n.ToString("d3"));
                 LogStrings.Add(str);
             }
 
@@ -94,9 +96,8 @@ namespace Binom
 
             /***********************************/
 
-
             LogStrings.Clear();
-            str = "BinomFactorization";
+            str = "Вынесение дробей";
             Console.WriteLine(str);
             LogStrings.Add(str);
             try
@@ -107,8 +108,9 @@ namespace Binom
                     Console.Write("n= {0}: ", n.ToString("d3"));
                     for (m = 0; m <= n; m++)
                     {
-                        str = str + BinomCalc.BinomFactorization(n, m).ToString() + " ";
-                        Console.Write(str);
+                        str1 = BinomCalc.BinomFactorization(n, m).ToString() + " ";
+                        str = str + str1;
+                        Console.Write(str1);
                     }
                     Console.WriteLine();
                     LogStrings.Add(str);
@@ -116,8 +118,47 @@ namespace Binom
             }
             catch
             {
-                str = str = "Капец при n=" + n.ToString("d3");
-                Console.WriteLine("Капец при n= {0}: ", n.ToString("d3"));
+                str = str + "КАПЕЦ при n=" + n.ToString("d3");
+                Console.WriteLine("КАПЕЦ при n= {0}: ", n.ToString("d3"));
+                LogStrings.Add(str);
+            }
+
+            str = "\n\r---------------";
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            foreach (string s in LogStrings)
+                LogFile.WriteLine(s);
+
+            Console.WriteLine();
+            LogFile.WriteLine();
+
+            /***********************************/
+
+            LogStrings.Clear();
+            str = "Рекусия со сложением";
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+            try
+            {
+                for (n = 0; n < 100; n++)
+                {
+                    str = "n=" + n.ToString("d3") + ": ";
+                    Console.Write("n= {0}: ", n.ToString("d3"));
+                    for (m = 0; m <= n; m++)
+                    {
+                        str1 = BinomCalc.BinomRecursiveAdd(n, m).ToString() + " ";
+                        str = str + str1;
+                        Console.Write(str1);
+                    }
+                    Console.WriteLine();
+                    LogStrings.Add(str);
+                }
+            }
+            catch
+            {
+                str = str + "КАПЕЦ при n=" + n.ToString("d3");
+                Console.WriteLine("КАПЕЦ при n= {0}: ", n.ToString("d3"));
                 LogStrings.Add(str);
             }
 
