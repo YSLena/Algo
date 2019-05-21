@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Numerics;
 
 namespace Binom
 {
@@ -12,14 +13,9 @@ namespace Binom
         List<string> LogStrings = new List<string>();
         public StreamWriter LogFile;
 
-        public void CalculateAndLog(int AlgoNum)
+        string getAlgjrithmName(int AlgoNum)
         {
-            string str, str1;
-            uint n = 0;
-            uint m = 0;
-
-            LogStrings.Clear();
-
+            string str;
             switch (AlgoNum)
             {
                 case 1:
@@ -43,10 +39,26 @@ namespace Binom
                 case 7:
                     str = "Рекусия с умножением с мемоизацией результатов";
                     break;
+                case 8:
+                    str = "Умножение с мемоизацией результатов без рекурсии";
+                    break;
                 default:
                     str = "Фигня";
                     break;
             }
+
+            return str;
+        }
+
+        public void CalculateAndLog(int AlgoNum, int maxN)
+        {
+            string str, str1;
+            uint n = 0;
+            uint m = 0;
+
+            LogStrings.Clear();
+
+            str = getAlgjrithmName(AlgoNum);
 
             Console.WriteLine(str);
             LogStrings.Add(str);
@@ -58,10 +70,10 @@ namespace Binom
 
             try
             {
-                for (n = 0; n <= 230; n++)
+                for (n = 0; n <= maxN; n++)
                 {
                     str = "n=" + n.ToString("d3") + ": ";
-                    Console.Write("n= {0}: ", n.ToString("d3"));
+                    //Console.Write("n= {0}: ", n.ToString("d3"));
                     for (m = 0; m <= n; m++)
                     {
                         switch (AlgoNum)
@@ -87,6 +99,9 @@ namespace Binom
                             case 7:
                                 str1 = BinomCalc.BinomRecursiveMultiplayMemo(n, m).ToString() + " "; ;
                                 break;
+                            case 8:
+                                str1 = BinomCalc.BinomMultiplayMemo(n, m).ToString() + " "; ;
+                                break;
                             default:
                                 str1 = "Фигня";
                                 break;
@@ -95,7 +110,7 @@ namespace Binom
                         str = str + str1;
                         Console.Write(str1);
                     }
-                    Console.WriteLine();
+                    Console.Write(str);
                     LogStrings.Add(str);
                 }
             }
@@ -133,6 +148,172 @@ namespace Binom
             Console.WriteLine();
 
         }
+
+        public void CalculateOneAndLog(int AlgoNum, uint n, uint m)
+        {
+            LogStrings.Clear();
+
+            string str, str1;
+
+            str = getAlgjrithmName(AlgoNum);
+
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            DateTime start = DateTime.Now;
+            str = start.ToLongTimeString() + "." + start.Millisecond.ToString("d3");
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            switch (AlgoNum)
+            {
+                case 1:
+                    str1 = BinomCalc.BinomNaive(n, m).ToString();
+                    break;
+                case 2:
+                    str1 = BinomCalc.BinomAdvanced(n, m).ToString();
+                    break;
+                case 3:
+                    str1 = BinomCalc.BinomFactorization(n, m).ToString();
+                    break;
+                case 4:
+                    str1 = BinomCalc.BinomRecursiveAdd(n, m).ToString();
+                    break;
+                case 5:
+                    str1 = BinomCalc.BinomRecursiveMultiplay(n, m).ToString();
+                    break;
+                case 6:
+                    str1 = BinomCalc.BinomRecursiveAddMemo(n, m).ToString(); ;
+                    break;
+                case 7:
+                    str1 = BinomCalc.BinomRecursiveMultiplayMemo(n, m).ToString(); ;
+                    break;
+                case 8:
+                    str1 = BinomCalc.BinomMultiplayMemo(n, m).ToString(); ;
+                    break;
+                default:
+                    str1 = "Фигня";
+                    break;
+            }
+
+            str = "C(" + n + "," + m + ") = " + str1;
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            DateTime finish = DateTime.Now;
+            str = finish.ToLongTimeString() + "." + finish.Millisecond.ToString("d3");
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            TimeSpan delta = finish - start;
+
+            str = delta.Hours.ToString() + " h " +
+                delta.Minutes.ToString() + " m " +
+                delta.Seconds.ToString() + " s " +
+                delta.Milliseconds.ToString() + " ms";
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            Console.WriteLine();
+            LogStrings.Add("");
+
+
+            foreach (string s in LogStrings)
+                LogFile.WriteLine(s);
+
+            Console.WriteLine();
+
+        }
+
+        uint[] testArr = new uint[100];
+
+        public void GenerateTestDate()
+        {
+            Random rand = new Random();
+            for (int i = 0; i < 100; i++)
+                testArr[i] = (uint)rand.Next(1000);
+        }
+
+        public void Calculate100AndLog(int AlgoNum, uint n, uint m)
+        {
+            LogStrings.Clear();
+
+            string str, str1;
+
+            str = getAlgjrithmName(AlgoNum);
+
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            DateTime start = DateTime.Now;
+            str = start.ToLongTimeString() + "." + start.Millisecond.ToString("d3");
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            BigInteger c, CSum;
+            
+
+            for (int i = 0; i < testArr.Length; i++)
+            {
+
+                switch (AlgoNum)
+                {
+                    case 1:
+                        c = BinomCalc.BinomNaive(testArr[i], testArr[i] / 2);
+                        break;
+                    case 2:
+                        c = BinomCalc.BinomAdvanced(testArr[i], testArr[i] / 2);
+                        break;
+                    case 3:
+                        c = BinomCalc.BinomFactorization(testArr[i], testArr[i] / 2);
+                        break;
+                    case 4:
+                        c = BinomCalc.BinomRecursiveAdd(testArr[i], testArr[i] / 2);
+                        break;
+                    case 5:
+                        c = BinomCalc.BinomRecursiveMultiplay(testArr[i], testArr[i] / 2);
+                        break;
+                    case 6:
+                        c = BinomCalc.BinomRecursiveAddMemo(testArr[i], testArr[i] / 2); ;
+                        break;
+                    case 7:
+                        c = BinomCalc.BinomRecursiveMultiplayMemo(testArr[i], testArr[i] / 2); ;
+                        break;
+                    case 8:
+                        c = BinomCalc.BinomMultiplayMemo(testArr[i], testArr[i] / 2); 
+                        break;
+                    default:
+                        c=0;
+                        break;
+                }
+              
+            }
+
+            DateTime finish = DateTime.Now;
+            str = finish.ToLongTimeString() + "." + finish.Millisecond.ToString("d3");
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            TimeSpan delta = finish - start;
+
+            str = delta.Hours.ToString() + " h " +
+                delta.Minutes.ToString() + " m " +
+                delta.Seconds.ToString() + " s " +
+                delta.Milliseconds.ToString() + " ms";
+            Console.WriteLine(str);
+            LogStrings.Add(str);
+
+            Console.WriteLine();
+            LogStrings.Add("");
+
+
+            foreach (string s in LogStrings)
+                LogFile.WriteLine(s);
+
+            Console.WriteLine();
+
+        }
+
 
     }
 }

@@ -93,6 +93,7 @@ namespace Binom
             return res;
         }
 
+        // Рекурсивные алгоритмы
         public static BigInteger BinomRecursiveAdd(uint n, uint k)
         {
             if (k > n)
@@ -139,13 +140,19 @@ namespace Binom
             return res;
         }
 
-        static List<BigInteger[]> BimomMemo = new List<BigInteger[]>();
+        // 3 одинаковых коллекции для 3 алгоритмов
+        static List<BigInteger[]> BimomMemo1 = new List<BigInteger[]>();
+        static List<BigInteger[]> BimomMemo2 = new List<BigInteger[]>();
+        static List<BigInteger[]> BimomMemo3 = new List<BigInteger[]>();
 
         public static void ClearMemo()
         {
-            BimomMemo.Clear();
+            BimomMemo1.Clear();
+            BimomMemo2.Clear();
+            BimomMemo3.Clear();
         }
 
+        // Рекурсивное сложение с сохранением результатов
         public static BigInteger BinomRecursiveAddMemo(uint n, uint k)
         {
             if (k > n)
@@ -161,14 +168,15 @@ namespace Binom
                 return 1;
 
             // в первых 3 строках хранить нечего
-            while (BimomMemo.Count < n-3)
-                BimomMemo.Add(new BigInteger[(BimomMemo.Count / 2) + 1]);
+            while (BimomMemo1.Count < n-3)
+                BimomMemo1.Add(new BigInteger[(BimomMemo1.Count / 2) + 1]);
 
             int i = (int)(n - 4);
             int j = (int)(m - 2);
 
-            if (BimomMemo[i][j] != 0)
-                return BimomMemo[i][j];
+            // Уже считали?
+            if (BimomMemo1[i][j] != 0)
+                return BimomMemo1[i][j];
 
             BigInteger res = 1;
 
@@ -177,10 +185,12 @@ namespace Binom
                 res = BinomRecursiveAddMemo(n - 1, m - 1) + BinomRecursiveAddMemo(n - 1, m);
             }
 
-            BimomMemo[i][j] = res;
+            // Сохраняем результат и возвращаем его
+            BimomMemo1[i][j] = res;
             return res;
         }
 
+        // Рекурсивное перемножение дробей с сохранением результатов
         public static BigInteger BinomRecursiveMultiplayMemo(uint n, uint k)
         {
             if (k > n)
@@ -196,14 +206,14 @@ namespace Binom
                 return 1;
 
             // в первых 3 строках хранить нечего
-            while (BimomMemo.Count < n - 3)
-                BimomMemo.Add(new BigInteger[(BimomMemo.Count / 2) + 1]);
+            while (BimomMemo2.Count < n - 3)
+                BimomMemo2.Add(new BigInteger[(BimomMemo2.Count / 2) + 1]);
 
             int i = (int)(n - 4);
             int j = (int)(m - 2);
 
-            if (BimomMemo[i][j] != 0)
-                return BimomMemo[i][j];
+            if (BimomMemo2[i][j] != 0)
+                return BimomMemo2[i][j];
 
             BigInteger res = 1;
 
@@ -212,7 +222,68 @@ namespace Binom
                 res = (BinomRecursiveMultiplayMemo(n - 1, m - 1) * n) / m;
             }
 
-            BimomMemo[i][j] = res;
+            BimomMemo2[i][j] = res;
+            return res;
+        }
+
+        // Перемножение дробей с сохранением результатов без рекурсии
+        public static BigInteger BinomMultiplayMemo(uint n, uint k)
+        {
+            if (k > n)
+                return 0;
+
+            //Выбираем меньшее значение, чтобы хранить только половину данных
+            uint m = Math.Min(k, n - k);
+
+            if (m == 1)
+                return n;
+
+            if (m == 0)
+                return 1;
+
+            // в первых 3 строках хранить нечего
+            while (BimomMemo3.Count < n - 3)
+                BimomMemo3.Add(new BigInteger[(BimomMemo3.Count / 2) + 1]);
+
+            int i = (int)(n - 4);
+            int j = (int)(m - 2);
+
+            // Проверяем, рассчитывалось ли значение раньше
+            if (BimomMemo3[i][j] != 0)
+                return BimomMemo3[i][j];
+
+            int ii = i;
+            int jj = j;
+
+            // Ищем предыдущее известное значение
+            while ((jj > 0) && (BimomMemo3[ii][jj] == 0))
+            {
+                ii--;
+                jj--;
+            }
+
+            BigInteger res = BimomMemo3[ii][jj];
+
+            if (res == 0)
+            {
+                // Если значения нет в массиве "берём" известное значение выше по диагонали от искомого, т.е. С(n-k+1, 1) 
+                // при этом индексы выходят за пределы массива, т.к. это значение не сохранялось
+                res = n - m + 1;
+                ii--;
+                jj--;
+            }
+
+            checked
+            {
+                while (jj < j)
+                {
+                    ii++;
+                    jj++;
+                    res = (res * (ii+4)) / (jj+2);
+                    BimomMemo3[ii][jj] = res;
+                }
+            }
+
             return res;
         }
 
