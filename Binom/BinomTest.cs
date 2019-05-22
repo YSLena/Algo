@@ -8,6 +8,9 @@ using System.Numerics;
 
 namespace Binom
 {
+
+    // Тестирование алгоритмов
+
     class BinomTest
     {
         List<string> LogStrings = new List<string>();
@@ -26,6 +29,9 @@ namespace Binom
                     break;
                 case 3:
                     str = "Вынесение дробей";
+                    break;
+                case 31:
+                    str = "Вынесение дробей, тип UInt64";
                     break;
                 case 4:
                     str = "Рекусия со сложением: C(n,k) = C(n-1,k-1) + C(n-1, k)";
@@ -64,7 +70,7 @@ namespace Binom
             LogStrings.Add(str);
 
             DateTime start = DateTime.Now;
-            str = start.ToLongTimeString()+"."+start.Millisecond.ToString("d3");
+            str = start.ToLongTimeString() + "." + start.Millisecond.ToString("d3");
             Console.WriteLine(str);
             LogStrings.Add(str);
 
@@ -149,6 +155,11 @@ namespace Binom
 
         }
 
+        int[] RecursiveAlgoNum = new int[4] {4, 5, 6, 7};
+
+        int[] MemoAlgoNum = new int[3] {6, 7, 8};
+
+
         public void CalculateOneAndLog(int AlgoNum, uint n, uint m)
         {
             LogStrings.Clear();
@@ -161,9 +172,6 @@ namespace Binom
             LogStrings.Add(str);
 
             DateTime start = DateTime.Now;
-            str = start.ToLongTimeString() + "." + start.Millisecond.ToString("d3");
-            Console.WriteLine(str);
-            LogStrings.Add(str);
 
             switch (AlgoNum)
             {
@@ -175,6 +183,9 @@ namespace Binom
                     break;
                 case 3:
                     str1 = BinomCalc.BinomFactorization(n, m).ToString();
+                    break;
+                case 31:
+                    str1 = BinomCalc.BinomUInt64Factorization(n, m).ToString();
                     break;
                 case 4:
                     str1 = BinomCalc.BinomRecursiveAdd(n, m).ToString();
@@ -201,9 +212,6 @@ namespace Binom
             LogStrings.Add(str);
 
             DateTime finish = DateTime.Now;
-            str = finish.ToLongTimeString() + "." + finish.Millisecond.ToString("d3");
-            Console.WriteLine(str);
-            LogStrings.Add(str);
 
             TimeSpan delta = finish - start;
 
@@ -213,6 +221,30 @@ namespace Binom
                 delta.Milliseconds.ToString() + " ms";
             Console.WriteLine(str);
             LogStrings.Add(str);
+
+            if (RecursiveAlgoNum.Contains(AlgoNum))
+            {
+                str1 = "Количество вызовов: ";
+                switch (AlgoNum)
+                {
+                    case 4:
+                        str1 = str1 + BinomCalc.RecursiveAddCount.ToString();
+                        break;
+                    case 5:
+                        str1 = str1 + BinomCalc.RecursiveMulpyCount.ToString();
+                        break;
+                    case 6:
+                        str1 = str1 + BinomCalc.RecursiveAddMemoCount.ToString();
+                        break;
+                    case 7:
+                        str1 = str1 + BinomCalc.RecursiveMultyMemoCount.ToString();
+                        break;
+                }
+
+                Console.WriteLine(str1);
+                LogStrings.Add(str1);
+            }
+
 
             Console.WriteLine();
             LogStrings.Add("");
@@ -234,7 +266,7 @@ namespace Binom
                 testArr[i] = (uint)rand.Next(1000);
         }
 
-        public void Calculate100AndLog(int AlgoNum, uint n, uint m)
+        public void Calculate100AndLog(int AlgoNum, bool MemoPrecalc)
         {
             LogStrings.Clear();
 
@@ -242,18 +274,40 @@ namespace Binom
 
             str = getAlgjrithmName(AlgoNum);
 
+            if (MemoPrecalc && RecursiveAlgoNum.Contains(AlgoNum))
+            {
+                str += " с предварительным расчётом";
+            }
+
             Console.WriteLine(str);
             LogStrings.Add(str);
 
             DateTime start = DateTime.Now;
-            str = start.ToLongTimeString() + "." + start.Millisecond.ToString("d3");
-            Console.WriteLine(str);
-            LogStrings.Add(str);
 
             BigInteger c, CSum;
-            
 
-            for (int i = 0; i < testArr.Length; i++)
+            // Предварителmный расчёт с мемоизацией
+            if (MemoPrecalc)
+            {
+                for (uint i = 1; i <= 1000; i++)
+                {
+                    switch (AlgoNum)
+                    {
+                        case 6:
+                            c = BinomCalc.BinomRecursiveAddMemo(i, i / 2); ;
+                            break;
+                        case 7:
+                            c = BinomCalc.BinomRecursiveMultiplayMemo(i, i / 2); 
+                            break;
+                        case 8:
+                            c = BinomCalc.BinomMultiplayMemo(i, i / 2);
+                            break;
+                    }
+                }
+            }
+
+
+                for (int i = 0; i < testArr.Length; i++)
             {
 
                 switch (AlgoNum)
@@ -274,25 +328,22 @@ namespace Binom
                         c = BinomCalc.BinomRecursiveMultiplay(testArr[i], testArr[i] / 2);
                         break;
                     case 6:
-                        c = BinomCalc.BinomRecursiveAddMemo(testArr[i], testArr[i] / 2); ;
+                        c = BinomCalc.BinomRecursiveAddMemo(testArr[i], testArr[i] / 2);
                         break;
                     case 7:
-                        c = BinomCalc.BinomRecursiveMultiplayMemo(testArr[i], testArr[i] / 2); ;
+                        c = BinomCalc.BinomRecursiveMultiplayMemo(testArr[i], testArr[i] / 2);
                         break;
                     case 8:
-                        c = BinomCalc.BinomMultiplayMemo(testArr[i], testArr[i] / 2); 
+                        c = BinomCalc.BinomMultiplayMemo(testArr[i], testArr[i] / 2);
                         break;
                     default:
-                        c=0;
+                        c = 0;
                         break;
                 }
               
             }
 
             DateTime finish = DateTime.Now;
-            str = finish.ToLongTimeString() + "." + finish.Millisecond.ToString("d3");
-            Console.WriteLine(str);
-            LogStrings.Add(str);
 
             TimeSpan delta = finish - start;
 

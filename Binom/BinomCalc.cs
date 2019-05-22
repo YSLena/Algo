@@ -7,11 +7,12 @@ using System.Numerics;
 
 namespace Binom
 {
+    // Вычисление биномиального коэффициента
+
     static class BinomCalc
     {
-        // Вычисление биномиального коэффициента
 
-        // Наивная реализация - вычисление по формуле в лоб - до n=20
+        // Наивная реализация - вычисление по формуле в лоб
         public static BigInteger BinomNaive(uint n, uint k)
         {
             if (k > n)
@@ -19,23 +20,19 @@ namespace Binom
 
             BigInteger res = 1;
 
-            checked
-            {
+            for (uint i = 1; i <= n; i++)
+                res *= i;
 
-                for (uint i = 1; i <= n; i++)
-                    res *= i;
+            for (uint j = 1; j <= k; j++)
+                res /= j;
 
-                for (uint j = 1; j <= k; j++)
-                    res /= j;
-
-                for (uint k1 = 1; k1 <= n - k; k1++)
-                    res /= k1;
-            }
+            for (uint k1 = 1; k1 <= n - k; k1++)
+                res /= k1;
 
             return res;
         }
 
-        // Очевидное улучшение: сокращение k! в числителе и знаменателе - до n=29
+        // Очевидное улучшение: сокращение k! в числителе и знаменателе 
         public static BigInteger BinomAdvanced(uint n, uint k)
         {
             if (k > n)
@@ -52,21 +49,17 @@ namespace Binom
                 return 1;
 
             BigInteger res = 1;
-            
-            checked
-            {
 
-                for (uint i = m+1; i <= n; i++)
-                    res *= i;
-               
-                for (uint j = 1; j <= n - m; j++)
-                    res /= j;
-            }
+            for (uint i = m + 1; i <= n; i++)
+                res *= i;
+
+            for (uint j = 1; j <= n - m; j++)
+                res /= j;
 
             return res;
         }
 
-        // На основе свойства вынесения, представляем C(n,k) как произведение дробей - до n= 62
+        // На основе свойства вынесения, представляем C(n,k) как произведение дробей
         public static BigInteger BinomFactorization(uint n, uint k)
         {
             if (k > n)
@@ -82,6 +75,31 @@ namespace Binom
 
             BigInteger res = 1;
 
+            for (uint i = 1; i <= n - m; i++)
+                /* Последовательность операций важна. 
+                 * Если деление выполниться перед умножением, будет отброшен хвост */
+                res = (res * (m + i)) / i;
+
+            return res;
+        }
+
+        // На основе свойства вынесения, представляем C(n,k) как произведение дробей
+        // Результат - целое число UInt64. Расчёт без переполнения до n= 62
+        public static UInt64 BinomUInt64Factorization(uint n, uint k)
+        {
+            if (k > n)
+                return 0;
+
+            uint m = Math.Max(k, n - k);
+
+            if (m == n - 1)
+                return n;
+
+            if (m == n)
+                return 1;
+
+            UInt64 res = 1;
+
             checked
             {
                 for (uint i = 1; i <= n - m; i++)
@@ -93,9 +111,29 @@ namespace Binom
             return res;
         }
 
+
         // Рекурсивные алгоритмы
+
+        // Счётчики вызовов рекурсивных методов - нужны только для тестирования
+
+        public static int RecursiveAddCount;
+        public static int RecursiveMulpyCount;
+        public static int RecursiveAddMemoCount;
+        public static int RecursiveMultyMemoCount;
+
+        public static void RecursiveCountReset()
+        {
+            RecursiveAddCount = 0;
+            RecursiveMulpyCount = 0;
+            RecursiveAddMemoCount = 0;
+            RecursiveMultyMemoCount = 0;
+        }
+
+
         public static BigInteger BinomRecursiveAdd(uint n, uint k)
         {
+            RecursiveAddCount++;
+
             if (k > n)
                 return 0;
 
@@ -109,16 +147,16 @@ namespace Binom
 
             BigInteger res = 1;
 
-            checked
-            {
-                res = BinomRecursiveAdd(n - 1, m - 1) + BinomRecursiveAdd(n - 1, m);
-            }
+            res = BinomRecursiveAdd(n - 1, m - 1) + BinomRecursiveAdd(n - 1, m);
 
             return res;
         }
 
         public static BigInteger BinomRecursiveMultiplay(uint n, uint k)
         {
+
+            RecursiveMulpyCount++;
+
             if (k > n)
                 return 0;
 
@@ -132,10 +170,7 @@ namespace Binom
 
             BigInteger res = 1;
 
-            checked
-            {
-                res = (BinomRecursiveMultiplay(n - 1, m - 1) * n) / m;
-            }
+            res = (BinomRecursiveMultiplay(n - 1, m - 1) * n) / m;
 
             return res;
         }
@@ -155,6 +190,9 @@ namespace Binom
         // Рекурсивное сложение с сохранением результатов
         public static BigInteger BinomRecursiveAddMemo(uint n, uint k)
         {
+
+            RecursiveAddMemoCount++;
+
             if (k > n)
                 return 0;
 
@@ -180,10 +218,7 @@ namespace Binom
 
             BigInteger res = 1;
 
-            checked
-            {
-                res = BinomRecursiveAddMemo(n - 1, m - 1) + BinomRecursiveAddMemo(n - 1, m);
-            }
+            res = BinomRecursiveAddMemo(n - 1, m - 1) + BinomRecursiveAddMemo(n - 1, m);
 
             // Сохраняем результат и возвращаем его
             BimomMemo1[i][j] = res;
@@ -193,6 +228,9 @@ namespace Binom
         // Рекурсивное перемножение дробей с сохранением результатов
         public static BigInteger BinomRecursiveMultiplayMemo(uint n, uint k)
         {
+
+            RecursiveMultyMemoCount++;
+
             if (k > n)
                 return 0;
 
@@ -217,10 +255,7 @@ namespace Binom
 
             BigInteger res = 1;
 
-            checked
-            {
-                res = (BinomRecursiveMultiplayMemo(n - 1, m - 1) * n) / m;
-            }
+            res = (BinomRecursiveMultiplayMemo(n - 1, m - 1) * n) / m;
 
             BimomMemo2[i][j] = res;
             return res;
@@ -268,20 +303,19 @@ namespace Binom
             {
                 // Если значения нет в массиве "берём" известное значение выше по диагонали от искомого, т.е. С(n-k+1, 1) 
                 // при этом индексы выходят за пределы массива, т.к. это значение не сохранялось
+                // но для корректных расчётов нужны индексы, которые бы имело это значение, если бы оно сохранялось
+                // Они могут быть отрицательными, это потом откорректируется
                 res = n - m + 1;
                 ii--;
                 jj--;
             }
 
-            checked
+            while (jj < j)
             {
-                while (jj < j)
-                {
-                    ii++;
-                    jj++;
-                    res = (res * (ii+4)) / (jj+2);
-                    BimomMemo3[ii][jj] = res;
-                }
+                ii++;
+                jj++;
+                res = (res * (ii + 4)) / (jj + 2);
+                BimomMemo3[ii][jj] = res;
             }
 
             return res;
