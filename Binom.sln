@@ -1,9 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binom", "Binom\Binom.csproj", "{4488AFF7-5C6F-4AAD-8798-E7A7213586C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2C571AE5-0C00-4EA9-8B0C-E96C369E3D8B}"
+	ProjectSection(SolutionItems) = preProject
+		Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.001.png = Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.001.png
+		Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.002.png = Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.002.png
+		Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.003.png = Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.003.png
+		Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.004.png = Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.004.png
+		Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.005.png = Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.005.png
+		Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.006.png = Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.006.png
+		Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.007.png = Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.007.png
+		Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.008.png = Биномиальный коэффициент\Aspose.Words.e72fad26-16ca-448c-a967-511cdcacbbea.008.png
+		Биномиальный коэффициент\Биномиальный коэффициент.md = Биномиальный коэффициент\Биномиальный коэффициент.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +31,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCA83F40-F25E-4815-9202-0D41DE4693CC}
 	EndGlobalSection
 EndGlobal

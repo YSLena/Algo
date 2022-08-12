@@ -194,7 +194,10 @@ namespace Binom
                     str1 = BinomCalc.BinomRecursiveMultiplay(n, m).ToString();
                     break;
                 case 6:
-                    str1 = BinomCalc.BinomRecursiveAddMemo(n, m).ToString(); ;
+                    str1 = BinomCalc.BinomRecursiveAddMemo(n, m).ToString();
+                    str1 += "\n\r" + BinomCalc.DisplayMemo(BinomCalc.BimomMemo1);
+
+
                     break;
                 case 7:
                     str1 = BinomCalc.BinomRecursiveMultiplayMemo(n, m).ToString(); ;
@@ -257,12 +260,12 @@ namespace Binom
 
         }
 
-        uint[] testArr = new uint[100];
+        uint[] testArr = new uint[1000];
 
         public void GenerateTestDate()
         {
             Random rand = new Random();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
                 testArr[i] = (uint)rand.Next(1000);
         }
 

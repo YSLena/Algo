@@ -80,6 +80,9 @@ namespace Binom
                  * Если деление выполниться перед умножением, будет отброшен хвост */
                 res = (res * (m + i)) / i;
 
+            //for (uint i = 1; i <= m; i++)
+            //    res = (res * ((n - m) + i)) / i;
+
             return res;
         }
 
@@ -176,9 +179,19 @@ namespace Binom
         }
 
         // 3 одинаковых коллекции для 3 алгоритмов
-        static List<BigInteger[]> BimomMemo1 = new List<BigInteger[]>();
-        static List<BigInteger[]> BimomMemo2 = new List<BigInteger[]>();
-        static List<BigInteger[]> BimomMemo3 = new List<BigInteger[]>();
+        public static List<BigInteger[]> BimomMemo1 = new List<BigInteger[]>();
+        public static List<BigInteger[]> BimomMemo2 = new List<BigInteger[]>();
+        public static List<BigInteger[]> BimomMemo3 = new List<BigInteger[]>();
+
+        public static string DisplayMemo(List<BigInteger[]> Memo)
+        {
+            string str = "";
+            foreach (BigInteger[] arr in Memo)
+            {
+                str += string.Join(" ", arr) + ";\n";
+            }
+            return str;
+        }
 
         public static void ClearMemo()
         {
